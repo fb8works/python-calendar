@@ -1,0 +1,19 @@
+.holiday {
+    background: red;
+}
+.day.sun {
+    background: red;
+}
+.day.sat {
+    background: red;
+}
+table.month {
+    border: 1px solid !important;
+    border-collapse: collapse;
+}
+/*
+td.month {
+    vertical-align: top;
+}
+*/
+
