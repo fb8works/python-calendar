@@ -1,0 +1,14 @@
+/* Simple calendar style sheet */
+.holiday {
+    background: red;
+}
+.day.sun {
+    background: pink;
+}
+.day.sat {
+    background: skyblue;
+}
+table.month {
+    border: 1px solid;
+    border-collapse: collapse;
+}

@@ -1,19 +1,50 @@
-.holiday {
-    background: red;
+/* Fancy calendar style sheet */
+body {
+    font-size: 0.8rem;
+}
+table {
+    border-collapse:collapse;
+    border:0px;
+}
+table, tr, td {
+    margin: 0px;
+    padding: 0px;
+}
+.day {
+    min-width: 2em;
+    max-width: 2em;
+    height: 2em;
+    text-align: center;
 }
 .day.sun {
-    background: red;
+    background: pink; /*日曜日*/
 }
 .day.sat {
-    background: red;
+    background: skyblue; /*土曜日*/
+}
+td.day.holiday {
+    background: red; /*祝日*/
+}
+td.day.holiday > div { /*祝日の赤丸*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-weight: 700;
+    background: radial-gradient(ellipse at center, pink 0%, pink 50%, transparent 70%);
 }
 table.month {
-    border: 1px solid !important;
-    border-collapse: collapse;
+    border: 1px solid;
 }
-/*
 td.month {
     vertical-align: top;
 }
-*/
-
+.hfill {
+    min-width: 0em;
+    height: 1em; /*上下の隙間*/
+}
+.vfill {
+    min-width: 1em; /*左右の隙間*/
+    height: 0em;
+}

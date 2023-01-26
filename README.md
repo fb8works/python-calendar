@@ -7,14 +7,12 @@ excel に貼り付ける事ができます。
 
 ![screenshot](https://github.com/fb8works/python-calendar/blob/main/screenshot.png?raw=true)
 
-## カレンダーの生成
+## Generate html calendar
 
 ```bash
 $ git clone https://github.com/fb8works/python-calendar.git
 $ cd python-calendar
-$ poetry install
-$ LC_TIME=ja_JP.UTF-8 poetry run python -m python_calendar.calendar --year 2023
-$ wslstart calendar.html
+$ make calendar
 ```
 
 ## NOTE

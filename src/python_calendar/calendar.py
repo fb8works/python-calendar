@@ -6,7 +6,7 @@ import html
 
 import click
 
-from .holidays import Syukujitsu, Holidays
+from .holidays import Holidays
 
 
 class MyHTMLCalendar(calendar.HTMLCalendar):
@@ -39,7 +39,7 @@ class MyHTMLCalendar(calendar.HTMLCalendar):
             if holiday_name:
                 css += ' holiday'
                 name = html.escape(holiday_name, quote=True)
-                return '<td class="%s" title="%s">%d</td>' % (css, name, day)
+                return '<td class="%s" title="%s"><div>%d</div></td>' % (css, name, day)
             else:
                 return '<td class="%s">%d</td>' % (css, day)
 
@@ -56,7 +56,7 @@ class MyHTMLCalendar(calendar.HTMLCalendar):
         """
         v = []
         a = v.append
-        a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' % (
+        a('<table class="%s">' % (
             self.cssclass_month))
         a('\n')
         a(self.formatmonthname(theyear, themonth, withyear=withyear))
@@ -64,7 +64,7 @@ class MyHTMLCalendar(calendar.HTMLCalendar):
         a(self.formatweekheader())
         a('\n')
 
-        # １月の行数を６週分固定にする
+        # １月の行数を６週分固定にして列数を統一する
         arr = self.monthdays2calendar(theyear, themonth)
         arr = arr + [[(0,0)] * 7] * (6 - len(arr))
 
@@ -83,49 +83,54 @@ class MyHTMLCalendar(calendar.HTMLCalendar):
         v = []
         a = v.append
         width = max(width, 1)
-        a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' %
+        a('<table class="%s">' %
           self.cssclass_year)
-        a('\n')
+        a('\n\n')
         a('<tr><th colspan="%d" class="%s">%s</th></tr>' % (
             width + width - 1, self.cssclass_year_head, theyear))
         for i in range(self.startmonth, self.startmonth+12, width):
             # months in this row
+            a('\n')
             months = [((x - 1) % 12) + 1 for x in range(i, i+width)]
             a('<tr class="months-row">')
             for m in months:
                 y = theyear + 1 if m < self.startmonth else theyear
+                # save current year and date for test holiday
                 self.cur_year = y
                 self.cur_month = m
+                a('\n\n')
                 a('<td class="month">')
                 a(self.formatmonth(y, m, withyear=False))
                 a('</td>')
                 # 月の左右の空白
                 # NOTE: 単に <td></td> とすると excel に貼り付けたときに結合セルになってしまうので同じ個数の空セルで埋める。
-                a('<td><table border="0" cellpadding="0" cellspacing="0" class="pad">' + ('<tr><td>&nbsp;</td></tr>' * (2+6)) + '</table></td>')
+                a('<td class="hpad"><table>' + ('<tr><td class="vfill"></td></tr>' * (2+6)) + '</table></td>')
             v.pop()
             a('</tr>')
 
             # 月の列の上下の空白
-            pad = ['<td><table border="0" cellpadding="0" cellspacing="0" class="pad">' + ('<td>&nbsp;</td>' * 7) + '</table></td>', '<td>&nbsp;</td>'] * width
+            pad = ['<td><table><tr>' + ('<td class="hfill"></td>' * 7) + '</tr></table></td>', '<td class="vpad"><table><tr><td class="vfill hfill"></td></tr></table></td>'] * width
             pad.pop()
-            a('\n\n<tr>' + ''.join(pad) + '</tr>\n\n')
+            a('\n<tr class="vpad">' + ''.join(pad) + '</tr>\n')
 
         v.pop()
         a('</table>')
         return ''.join(v)
 
 
-@click.command()
+@click.command(context_settings={'show_default': True})
 @click.option('--year', default=datetime.date.today().year, help='target year')
-@click.option('--filename', default='calendar.html', help='output HTML filename')
-@click.option('--css', default='./calendar.css', help='css filename (link filename or URL)')
-def main(year, filename, css):
+@click.option('--output', default='calendar.html', help='output HTML filename')
+@click.option('--css', default='./calendar.css', help='css location or URL')
+@click.option('--encoding', default='utf-8', help='character encoding for output')
+def main(year, output, css, encoding):
     lc_time = os.getenv('LC_ALL') or os.getenv('LC_TIME') or os.getenv('LANG')
     locale.setlocale(locale.LC_TIME, lc_time)
+
     cal = MyHTMLCalendar(firstweekday=0, startmonth=4)
-    year = 2023
-    with open(filename, 'wb') as fh:
-        fh.write(cal.formatyearpage(year, css=css))
+
+    with open(output, 'wb') as fh:
+        fh.write(cal.formatyearpage(year, css=css, encoding=encoding))
 
 
 if __name__ == '__main__':
