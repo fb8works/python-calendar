@@ -1,7 +1,9 @@
 .envrc
 .tool-versions
 calendar.html
-test.calendar.2023.html
+calendar.css
+test.2023.html
+test.2023.css
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

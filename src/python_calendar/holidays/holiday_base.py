@@ -1,8 +1,9 @@
 import itertools
+from typing import Dict
 
 
 class HolidayBase:
-    CONVERT = None
+    CONVERT: Dict[str, str] = {}
 
     def __init__(self):
         self.cache = {}
@@ -25,14 +26,12 @@ class HolidayBase:
             self.cache_by_date = dict(self.cache[year])
         return self.cache[year]
 
-    def get_holiday_name(self, dt):
-        self.get_by_year(dt.year)
-        return self.cache_by_date.get(dt)
+    def get_holiday_name(self, date):
+        self.get_by_year(date.year)
+        return self.cache_by_date.get(date)
 
     def get_by_years(self, years):
-        return list(itertools.chain.from_iterable([
-            self.get_by_year(y) for y in years
-        ]))
+        return list(itertools.chain.from_iterable([self.get_by_year(y) for y in years]))
 
     def format_item(self, item):
-        return '{} {}'.format(item[0].strftime('%Y/%m/%d'), item[1])
+        return "{} {}".format(item[0].strftime("%Y/%m/%d"), item[1])

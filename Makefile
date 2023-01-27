@@ -2,18 +2,14 @@ SHELL := /bin/bash
 
 # parameters
 
+STYLE ?= default
 CSS ?= calendar.css
 
 # constants
 
 SYUKUJITSU_CSV := syukujitsu.csv
 OUTPUT := calendar.html
-
-TEST_YEAR := 2023
-OUTPUT_SAMPLE := calendar.$(TEST_YEAR).sample.html
-OUTPUT_TEST := calendar.$(TEST_YEAR).html
-
-CLEANS := $(OUTPUT) $(OUTPUT_TEST)
+CLEANS := $(OUTPUT) $(CSS)
 
 
 all: calendar watch
@@ -22,18 +18,21 @@ prep:
 	@[ -e "$$(poetry env info -p)" ] || poetry install
 
 $(OUTPUT): prep
-	poetry run python -m python_calendar.calendar --output $@ --css "$(CSS)"
-
-$(OUTPUT_TEST): prep
-	LC_ALL=C poetry run python -m python_calendar.calendar --css "calendar-simple.css" --year $(TEST_YEAR) --output "$@"
+	poetry run pycal --no-browser --output "$@" --style "$(STYLE)" --css "$(CSS)" --force
 
 calendar: clean $(OUTPUT)
 
+watch: PORT := $(shell python -c "import socket; s = socket.socket(); s.bind(('', 0));print(s.getsockname()[1]);s.close()")
 watch: $(OUTPUT)
-	$ (sleep 1; wslstart http://127.0.0.1:8888/$(OUTPUT) &); livereload -p 8888
+	(sleep 1; python -c 'import webbrowser; webbrowser.open("http://127.0.0.1:$(PORT)/$(OUTPUT)")') &
+	livereload -p $(PORT)
 
-test: $(OUTPUT_SAMPLE) $(OUTPUT_TEST) 
-	diff $^
+test:
+	poetry run isort .
+	poetry run black .
+	poetry run pflake8 .
+	poetry run mypy .
+	poetry run pytest
 
 test-verify: $(SYUKUJITSU_CSV) | prep
 	poetry run python -m python_calendar.test.verify
@@ -55,3 +54,5 @@ distclean: clean
 
 $(SYUKUJITSU_CSV):
 	poetry run python -c 'import sys, urllib.request'$$'\n''with open(sys.argv[2], mode="wb") as f: f.write(urllib.request.urlopen(sys.argv[1]).read())' "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv" "$@"
+
+.PHONY: all prep calendar watch test test-verify setup setup-devel

@@ -1,10 +1,10 @@
+import sys
 from collections import defaultdict
 
 import click
 from prettytable import PrettyTable
 
-from python_calendar.holidays import Syukujitsu, Holidays
-from python_calendar.holidays.jpholiday import JPHoliday
+from python_calendar.holidays import Holidays, Syukujitsu
 
 
 def verify(*, normalize=False):
@@ -14,8 +14,16 @@ def verify(*, normalize=False):
     normalize が True の場合は各パッケージの返す祝日の名前を一般化して比較します。
     """
 
-    years = list(range(1955, 2023+1))
-    classes = (Syukujitsu, Holidays, JPHoliday)
+    years = list(range(1955, 2023 + 1))
+    classes = [Syukujitsu, Holidays]
+    try:
+        __import__("jpholiday")
+    except ModuleNotFoundError:
+        print("jpholiday is not installed", file=sys.stderr)
+    else:
+        from python_calendar.holidays.jpholiday import JPHoliday
+
+        classes = (Syukujitsu, Holidays, JPHoliday)
 
     # {<datetime.date>: [S1, H1, J1, S2, H2, J2]}
     # S1,H1,J1: original name. eg. "皇太子・皇太子徳仁親王の結婚の儀"
@@ -26,30 +34,37 @@ def verify(*, normalize=False):
         instance = cls()
         data = instance.get_by_years(years)
         for item in data:
-            dt, name = item
-            name_by_date[dt][i] = name
+            date, name = item
+            name_by_date[date][i] = name
             if normalize:
-                name_by_date[dt][i+3] = instance.normalize_item(item)[1]
+                item = instance.normalize_item(item)
+                name_by_date[date][i + len(classes)] = item[1]
 
     table = PrettyTable()
-    table.field_names = ['Date'] + [cls.__name__ for cls in classes]
+    table.field_names = ["Date"] + [cls.__name__ for cls in classes]
 
-    slicer = slice(0,3) if normalize else slice(3)
+    slicer = slice(0, len(classes)) if normalize else slice(len(classes))
 
-    for dt, names in sorted(name_by_date.items(), key=lambda x: x[0]):
+    for date, names in sorted(name_by_date.items(), key=lambda x: x[0]):
         if len(set(names[slicer])) != 1:
-            value = [x if x is not None else '-' for x in names[:3]]
-            table.add_row([dt] + value)
+            value = [x if x is not None else "-" for x in names[: len(classes)]]
+            table.add_row([date] + value)
 
     print(table)
 
 
 @click.command()
-@click.option("--normalize", is_flag=True, show_default=True, default=False, help="validate with normalize holiday name")
+@click.option(
+    "--normalize",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="validate with normalize holiday name",
+)
 def main(normalize):
-    verify(normalize=False)
+    verify(normalize=normalize)
 
 
-if __name__ == '__main__':
+# pylint: disable=no-value-for-parameter
+if __name__ == "__main__":
     main()
-

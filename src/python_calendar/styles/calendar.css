@@ -3,8 +3,8 @@ body {
     font-size: 0.8rem;
 }
 table {
-    border-collapse:collapse;
-    border:0px;
+    border-collapse: collapse;
+    border: 0px;
 }
 table, tr, td {
     margin: 0px;

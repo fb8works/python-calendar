@@ -1,18 +1,75 @@
 # python-calendar
 
-Python calendar generator using standard holidays python module.
+[![Python Lint & Test](https://github.com/fb8works/python-calendar/actions/workflows/python-app-custom.yml/badge.svg)](https://github.com/fb8works/python-calendar/actions/workflows/python-app-custom.yml)
+
+A year calendar generator for Excel.
 
 シンプルな４月始まりのカレンダーを html で生成します。
-excel に貼り付ける事ができます。
+コピーする事で excel に貼り付ける事ができます。
 
 ![screenshot](https://github.com/fb8works/python-calendar/blob/main/screenshot.png?raw=true)
 
-## Generate html calendar
+## Install
 
 ```bash
-$ git clone https://github.com/fb8works/python-calendar.git
-$ cd python-calendar
-$ make calendar
+pip install git+https://github.com/fb8works/python-calendar.git
+```
+
+## Generate calendar
+
+Generate a calendar for this year.
+
+```bash
+pycal
+```
+
+## Start month
+
+If you want to change start month.
+
+```bash
+pycal --start-month=1
+```
+
+## Number of columns
+
+If you want to change number of columns.
+
+```bash
+pycal --width=4
+```
+
+## Locale
+
+You can change locale for calendar.
+
+```bash
+pycal --locale=en_US
+```
+
+## Subdivision
+
+The subdivisions can be specified. eg. for california.
+
+```bash
+pycal --locale=en_US --subdiv=CA
+```
+
+## Style sheet
+
+カレンダーを生成するとカレントディレクトリに calendar.css が生成されます。
+スタイルシートを編集することをで祝日の色等を変更する事ができます。
+
+```css
+.holiday {
+    background: red;
+}
+.day.sun {
+    background: pink;
+}
+.day.sat {
+    background: skyblue;
+}
 ```
 
 ## NOTE
