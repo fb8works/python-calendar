@@ -6,27 +6,22 @@ authors = ["Daisuke Arai <daisuke.qu@gmail.com>"]
 readme = "README.md"
 packages = [{include = "python_calendar", from = "src"}]
 
-
 [tool.flake8]
 extend-ignore = "E203,F401,C901"
 max-line-length = 200
 max-complexity = 10
 
-
 [tool.mypy]
 ignore_missing_imports = true
 
-
 [tool.poetry.scripts]
 pycal = 'python_calendar.cli:main'
-
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
 holidays = "^0.18"
 click = "^8.1.3"
 python-dateutil = "^2.7.0"
-
 
 [tool.poetry.group.dev.dependencies]
 jpholiday = "^0.1.8"
@@ -39,7 +34,6 @@ isort = "^5.12.0"
 black = "^23.1.0"
 mypy = "^0.991"
 types-setuptools = "^65.7.0.4"
-
 
 [build-system]
 requires = ["poetry-core"]

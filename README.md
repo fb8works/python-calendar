@@ -2,7 +2,7 @@
 
 [![Python Lint & Test](https://github.com/fb8works/python-calendar/actions/workflows/python-app-custom.yml/badge.svg)](https://github.com/fb8works/python-calendar/actions/workflows/python-app-custom.yml)
 
-A year calendar generator for Excel.
+Tool to create an anual calendar available in Excel.
 
 シンプルな４月始まりのカレンダーを html で生成します。
 コピーする事で excel に貼り付ける事ができます。
@@ -23,17 +23,13 @@ Generate a calendar for this year.
 pycal
 ```
 
-## Start month
-
-If you want to change start month.
+## Specify the year and start month
 
 ```bash
-pycal --start-month=1
+pycal --year=2023 --start-month=1
 ```
 
-## Number of columns
-
-If you want to change number of columns.
+## Change the number of columns
 
 ```bash
 pycal --width=4
@@ -41,10 +37,18 @@ pycal --width=4
 
 ## Locale
 
-You can change locale for calendar.
+You can change the calendar locale. Defaults to LC_ALL, LC_TIME, LANG environment variable or 'C'.
 
 ```bash
 pycal --locale=en_US
+```
+
+## Country
+
+You can change the country that determines the holiday. default is same as locale.
+
+```bash
+pycal --locale=en_US --country=JP
 ```
 
 ## Subdivision
@@ -55,10 +59,18 @@ The subdivisions can be specified. eg. for california.
 pycal --locale=en_US --subdiv=CA
 ```
 
+## Financial holiday
+
+If you want clendar that uses financial holidays. The --country option is ignored.
+
+```bash
+pycal --financial=NYSE
+```
+
 ## Style sheet
 
 カレンダーを生成するとカレントディレクトリに calendar.css が生成されます。
-スタイルシートを編集することをで祝日の色等を変更する事ができます。
+スタイルシートを編集することで祝日の色等を変更する事ができます。
 
 ```css
 .holiday {
@@ -74,7 +86,7 @@ pycal --locale=en_US --subdiv=CA
 
 ## NOTE
 
-[内閣府の祝日データ](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html) と holidays, jpholidays モジュールの判定および祝日の名前を比較検証します。
+[内閣府の祝日データ](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html) と holidays, jpholidays モジュールの相違を比較検証します。
 
 ```bash
 $ make test-verify

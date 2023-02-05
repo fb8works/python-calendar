@@ -1,7 +1,6 @@
 import calendar
 import datetime
 import html
-
 import holidays
 
 
@@ -31,14 +30,14 @@ class HTMLCalendar(calendar.HTMLCalendar):
     ]
 
     def __init__(
-        self, firstweekday=0, startmonth=1, country=None, financial=False, subdiv=None
+        self, firstweekday=0, startmonth=1, country=None, financial=None, subdiv=None
     ):
         super().__init__(firstweekday)
         self.cur_year = None
         self.cur_month = None
         self.startmonth = startmonth
         if financial:
-            self.holidays = holidays.financial_holidays(country, subdiv=subdiv)
+            self.holidays = holidays.financial_holidays(financial)
         else:
             self.holidays = holidays.country_holidays(country, subdiv=subdiv)
 
