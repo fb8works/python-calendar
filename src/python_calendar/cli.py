@@ -97,18 +97,16 @@ def main(
         or os.getenv("LC_ALL")
         or os.getenv("LC_TIME")
         or os.getenv("LANG")
+        or locale.getdefaultlocale()[0]
         or "C"
     )
 
     lc_time_orig = lc_time
-    if "." not in lc_time:
-        lc_time += ".UTF-8"
-
     try:
         locale.setlocale(locale.LC_TIME, lc_time)
-    except locale.Error:
-        print(f"Bad locale {lc_time_orig}", file=sys.stderr)
-        print("Please available locale in your system. eg. locale -a.", file=sys.stderr)
+    except locale.Error as exc:
+        print(f"Bad locale {lc_time_orig}: {exc}", file=sys.stderr)
+        print("Please check available locale on your system.", file=sys.stderr)
         sys.exit(1)
 
     if financial is None and country is None:
@@ -118,7 +116,11 @@ def main(
             print(f"Holiday region: {country}.", file=sys.stderr)
         else:
             print(
-                f"Bad locale {lc_time}. please use --country option.",
+                f"warning: Can not detect coutry from locale {lc_time}",
+                file=sys.stderr,
+            )
+            print(
+                "Plase use --country option.",
                 file=sys.stderr,
             )
             sys.exit(1)
