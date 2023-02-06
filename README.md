@@ -45,10 +45,10 @@ pycal --locale=en_US
 
 ## Country
 
-You can change the country that determines the holiday. default is same as locale.
+You can change the region of country that determines the holiday. default is same as locale.
 
 ```bash
-pycal --locale=en_US --country=JP
+pycal --country=JP
 ```
 
 ## Subdivision

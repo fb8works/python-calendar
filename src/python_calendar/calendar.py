@@ -9,6 +9,7 @@ class HTMLCalendar(calendar.HTMLCalendar):
     This calendar returns complete HTML pages.
     """
 
+    cssclass_noday = "day noday"
     cssclasses = [
         "day mon",
         "day tue",
@@ -18,7 +19,6 @@ class HTMLCalendar(calendar.HTMLCalendar):
         "day sat",
         "day sun",
     ]
-    cssclass_noday = "day noday"
     cssclasses_weekday_head = [
         "wd mon",
         "wd tue",
@@ -79,7 +79,7 @@ class HTMLCalendar(calendar.HTMLCalendar):
         a(self.formatweekheader())
         a("\n")
 
-        # １月の行数を６週分固定にして列数を統一する
+        # make noday cells (7days * 6week - {days in month})
         arr = self.monthdays2calendar(theyear, themonth)
         arr = arr + [[(0, 0)] * 7] * (6 - len(arr))
 
@@ -118,7 +118,7 @@ class HTMLCalendar(calendar.HTMLCalendar):
                 a('<td class="month">')
                 a(self.formatmonth(y, m, withyear=False))
                 a("</td>")
-                # 月の左右の空白
+                # vertical space between month
                 # NOTE: 単に <td></td> とすると excel に貼り付けたときに結合セルになってしまうので同じ個数の空セルで埋める。
                 a(
                     '<td class="hpad"><table>'
@@ -128,14 +128,13 @@ class HTMLCalendar(calendar.HTMLCalendar):
             v.pop()
             a("</tr>")
 
-            # 月の列の上下の空白
+            # horizontal space between month
             pad = [
                 "<td><table><tr>"
                 + ('<td class="hfill"></td>' * 7)
                 + "</tr></table></td>",
                 '<td class="vpad"><table><tr><td class="vfill hfill"></td></tr></table></td>',
-            ] * width
-            pad.pop()
+            ] * (width - 1)
             a('\n<tr class="vpad">' + "".join(pad) + "</tr>\n")
 
         v.pop()

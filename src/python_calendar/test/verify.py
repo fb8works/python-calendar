@@ -4,7 +4,7 @@ from collections import defaultdict
 import click
 from prettytable import PrettyTable
 
-from python_calendar.holidays import Holidays, Syukujitsu
+from .holidays import Holidays, Syukujitsu
 
 
 def verify(*, normalize=False):
@@ -21,9 +21,9 @@ def verify(*, normalize=False):
     except ModuleNotFoundError:
         print("jpholiday is not installed", file=sys.stderr)
     else:
-        from python_calendar.holidays.jpholiday import JPHoliday
+        from .holidays.jpholiday import JPHoliday
 
-        classes = (Syukujitsu, Holidays, JPHoliday)
+        classes += [JPHoliday]
 
     # {<datetime.date>: [S1, H1, J1, S2, H2, J2]}
     # S1,H1,J1: original name. eg. "皇太子・皇太子徳仁親王の結婚の儀"
@@ -65,6 +65,5 @@ def main(normalize):
     verify(normalize=normalize)
 
 
-# pylint: disable=no-value-for-parameter
 if __name__ == "__main__":
-    main()
+    main()  # pylint: disable=no-value-for-parameter

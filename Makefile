@@ -32,10 +32,10 @@ $(OUTPUT): prep
 
 calendar: clean $(OUTPUT)
 
-watch: PORT := $(shell python -c "import socket; s = socket.socket(); s.bind(('', 0));print(s.getsockname()[1]);s.close()")
+watch: PORT := $(shell poetry run python -c "import socket; s = socket.socket(); s.bind(('', 0));print(s.getsockname()[1]);s.close()")
 watch: $(OUTPUT)
-	(sleep 1; python -c 'import webbrowser; webbrowser.open("http://127.0.0.1:$(PORT)/$(OUTPUT)")') &
-	livereload -p $(PORT)
+	(sleep 1; poetry run python -c 'import webbrowser; webbrowser.open("http://127.0.0.1:$(PORT)/$(OUTPUT)")') &
+	poetry run livereload -p $(PORT)
 
 lint:
 	poetry run isort .
@@ -60,6 +60,6 @@ clean:
 distclean: clean
 
 $(SYUKUJITSU_CSV):
-	poetry run python -c 'import sys, urllib.request'$$'\n''with open(sys.argv[2], mode="wb") as f: f.write(urllib.request.urlopen(sys.argv[1]).read())' "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv" "$@"
+	poetry run python -c $$'import sys, urllib.request\ncontent = urllib.request.urlopen(sys.argv[1]).read()\nwith open(sys.argv[2], mode="wb") as f: f.write(content)' "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv" "$@"
 
 .PHONY: all prep setup setup-devel calendar watch lint test test-verify production clean distclean
