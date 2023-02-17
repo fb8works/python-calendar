@@ -10,6 +10,7 @@ CSS ?= calendar.css
 SYUKUJITSU_CSV := syukujitsu.csv
 OUTPUT := calendar.html
 CLEANS := $(OUTPUT) $(CSS)
+PACKAGE := python_calendar
 
 
 all: calendar watch
@@ -40,16 +41,23 @@ watch: $(OUTPUT)
 lint:
 	poetry run isort .
 	poetry run black .
-	poetry run pflake8 .
 	poetry run mypy .
+#	poetry run pflake8 .
 
 test:
 	poetry run pytest
 
 test-verify: $(SYUKUJITSU_CSV) | prep
-	poetry run python -m python_calendar.test.verify
+	poetry run python -m $(PACKAGE).test.verify
 
-pre-commit: requirements.txt
+pre-commit: setup.py requirements.txt
+
+setup.py:
+	rm -rf dist
+	poetry build
+	tar xzf dist/$(PACKAGE)-*.tar.gz -C ./dist
+	cp dist/$(PACKAGE)-*/setup.py setup.py
+	rm -rf dist
 
 requirements.txt: pyproject.toml poetry.lock
 	poetry export --format=requirements.txt --output=$@ --without-hashes

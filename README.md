@@ -9,6 +9,10 @@ Tool to create an anual calendar available in Excel.
 
 ![screenshot](https://github.com/fb8works/python-calendar/blob/main/screenshot.png?raw=true)
 
+## Requirements
+
+- Python 3.8.0 or later
+
 ## Install
 
 ```bash
