@@ -52,11 +52,13 @@ test-verify: $(SYUKUJITSU_CSV) | prep
 
 pre-commit: setup.py requirements.txt
 
-setup.py:
+setup.py: pyproject.toml poetry.lock
 	rm -rf dist
 	poetry build
 	tar xzf dist/$(PACKAGE)-*.tar.gz -C ./dist
-	cp dist/$(PACKAGE)-*/setup.py setup.py
+	cp dist/$(PACKAGE)-*/setup.py setup.py.temp
+	sed -i -e 's/^\(setup(\*\*setup_kwargs)\)$$/\1  # type: ignore/' setup.py.temp
+	mv setup.py.temp setup.py
 	rm -rf dist
 
 requirements.txt: pyproject.toml poetry.lock
