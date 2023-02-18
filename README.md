@@ -54,7 +54,7 @@ Options:
   --subdiv TEXT                 Specify subdivision.
   --financial TEXT              Use financial holiday.
   -f, --force                   Force overwrite css file.
-  --no-browser                  Do not open browser.
+  -n, --no-browser              Do not open browser.
   -v, --verbose                 Show information.
   --help                        Show this message and exit.
 ```

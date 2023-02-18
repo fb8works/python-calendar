@@ -74,7 +74,7 @@ def get_css_stream(style):
 @click.option("--subdiv", default=None, help="Specify subdivision.")
 @click.option("--financial", default=None, help="Use financial holiday.")
 @click.option("--force", "-f", is_flag=True, help="Force overwrite css file.")
-@click.option("--no-browser", is_flag=True, help="Do not open browser.")
+@click.option("--no-browser", "-n", is_flag=True, help="Do not open browser.")
 @click.option("--verbose", "-v", is_flag=True, help="Show information.")
 @click.argument(
     "year",
