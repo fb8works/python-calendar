@@ -16,10 +16,10 @@ class JPHoliday(HolidayBase):
         "体育の日": "スポーツの日",
     }
 
-    def normalize_item(self, item):
-        if item[1].endswith("振替休日"):
-            return (item[0], "休日")
-        return super().normalize_item(item)
+    def normalize_name(self, name):
+        if name.endswith("振替休日"):
+            return "休日"
+        return super().normalize_name(name)
 
     def _get_by_year(self, year):
         return [(k, v) for k, v in jpholiday.year_holidays(year)]

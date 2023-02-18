@@ -12,13 +12,13 @@ class HolidayBase:
     def _get_by_year(self, year):
         raise NotImplementedError()
 
-    def normalize_item(self, item):
+    def normalize_name(self, name):
         if self.CONVERT is not None:
             try:
-                item = (item[0], self.CONVERT[item[1]])
+                return self.CONVERT[name]
             except KeyError:
                 pass
-        return item
+        return name
 
     def get_by_year(self, year):
         if year not in self.cache:

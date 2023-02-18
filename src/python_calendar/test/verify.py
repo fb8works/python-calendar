@@ -34,21 +34,21 @@ def verify(*, normalize=False):
         instance = cls()
         data = instance.get_by_years(years)
         for item in data:
-            date, name = item
-            name_by_date[date][i] = name
+            dt, name = item
+            name_by_date[dt][i] = name
             if normalize:
-                item = instance.normalize_item(item)
-                name_by_date[date][i + len(classes)] = item[1]
+                name = instance.normalize_name(name)
+                name_by_date[dt][i + len(classes)] = name
 
     table = PrettyTable()
     table.field_names = ["Date"] + [cls.__name__ for cls in classes]
 
-    slicer = slice(0, len(classes)) if normalize else slice(len(classes))
+    slicer = slice(len(classes), None) if normalize else slice(0, len(classes))
 
-    for date, names in sorted(name_by_date.items(), key=lambda x: x[0]):
+    for dt, names in sorted(name_by_date.items(), key=lambda x: x[0]):
         if len(set(names[slicer])) != 1:
             value = [x if x is not None else "-" for x in names[: len(classes)]]
-            table.add_row([date] + value)
+            table.add_row([dt] + value)
 
     print(table)
 

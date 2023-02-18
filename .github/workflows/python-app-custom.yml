@@ -24,8 +24,7 @@ jobs:
         run: |
           pip install poetry
           poetry install --no-interaction
-      - name: Make test
+      - name: Make test and lint
         run: |
           make test
           make lint
-

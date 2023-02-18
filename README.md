@@ -27,16 +27,36 @@ Generate a calendar for this year.
 pycal
 ```
 
-## Specify the year and start month
+Generate a calendar for the year 2023 with the first day of the week being Sunday and starting in April.
 
 ```bash
-pycal --year=2023 --start-month=1
+pycal 2023 sun 4
 ```
 
-## Change the number of columns
+## Arguments and options
 
-```bash
-pycal --width=4
+```
+$ pycal --help
+Usage: pycal [OPTIONS] [YEAR] [[mon|tue|wed|thu|fri|sat|sun]] [START_MONTH]
+
+Options:
+  --width INTEGER RANGE         Width of columns.  [default: 3; 1<=x<=12]
+  -o, --output TEXT             Output HTML filename.  [default:
+                                calendar.html]
+  --css TEXT                    Output css filename. (relative from output
+                                directory)
+  --css-href TEXT               CSS location or URL.
+  -s, --style [default|simple]  CSS template name.  [default: default]
+  --encoding TEXT               Character encoding for HTML.  [default: utf-8]
+  --locale TEXT                 Locale eg. en_US.UTF-8.
+  -c, --country TEXT            Country code for holidays. eg. US (default is
+                                same as locale)
+  --subdiv TEXT                 Specify subdivision.
+  --financial TEXT              Use financial holiday.
+  -f, --force                   Force overwrite css file.
+  --no-browser                  Do not open browser.
+  -v, --verbose                 Show information.
+  --help                        Show this message and exit.
 ```
 
 ## Locale

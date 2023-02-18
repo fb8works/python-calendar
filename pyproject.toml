@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-calendar"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python Calendar"
 authors = ["Daisuke Arai <daisuke.qu@gmail.com>"]
 readme = "README.md"
