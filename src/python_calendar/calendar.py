@@ -5,7 +5,7 @@ import html
 import holidays
 
 
-class HTMLCalendar(calendar.HTMLCalendar):
+class HTMLCalendar(calendar.LocaleHTMLCalendar):
     """
     This calendar returns complete HTML pages.
     """
@@ -31,9 +31,15 @@ class HTMLCalendar(calendar.HTMLCalendar):
     ]
 
     def __init__(
-        self, firstweekday=0, startmonth=1, country=None, financial=None, subdiv=None
+        self,
+        firstweekday=0,
+        locale=None,
+        startmonth=1,
+        country=None,
+        financial=None,
+        subdiv=None,
     ):
-        super().__init__(firstweekday)
+        super().__init__(firstweekday, locale=locale)
         self.cur_year = None
         self.cur_month = None
         self.startmonth = startmonth
