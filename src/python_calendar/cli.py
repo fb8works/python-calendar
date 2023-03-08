@@ -117,15 +117,24 @@ def main(
     )
 
     lc_time_orig = lc_time
-    if "." not in lc_time:
-        lc_time = lc_time + ".UTF-8"
-
     try:
         locale.setlocale(locale.LC_TIME, lc_time)
     except locale.Error as exc:
-        print(f"Bad locale {lc_time_orig}: {exc}", file=sys.stderr)
-        print("Please check available locale on your system.", file=sys.stderr)
-        sys.exit(1)
+        # locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8") raises locale.Error
+        old_ctype = locale.getlocale(locale.LC_CTYPE)
+        lc_time = lc_time.split(".")[0]
+        try:
+            locale.setlocale(locale.LC_ALL, lc_time)
+            coding = locale.nl_langinfo(locale.CODESET)
+            try_lc_time = lc_time.split(".")[0] + "." + coding
+            locale.setlocale(locale.LC_TIME, try_lc_time)
+        except locale.Error:
+            locale.setlocale(locale.LC_CTYPE, old_ctype)
+            print(f"Bad locale {lc_time_orig}: {exc}", file=sys.stderr)
+            print("Please check available locale on your system.", file=sys.stderr)
+            sys.exit(1)
+        finally:
+            locale.setlocale(locale.LC_CTYPE, old_ctype)
 
     first_weekday = Weekday[first_weekday]
 
