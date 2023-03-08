@@ -12,6 +12,7 @@ import click
 import pkg_resources
 
 from .calendar import HTMLCalendar
+from .locale_win import normalize_locale_win
 from .util import dot_path
 
 
@@ -112,8 +113,7 @@ def main(
         or os.getenv("LC_ALL")
         or os.getenv("LC_TIME")
         or os.getenv("LANG")
-        or locale.getdefaultlocale()[0]
-        or "C"
+        or ".".join(locale.getlocale())  # Windows: Japanese_Japan.932
     )
 
     lc_time_orig = lc_time
@@ -136,10 +136,12 @@ def main(
         finally:
             locale.setlocale(locale.LC_CTYPE, old_ctype)
 
-    first_weekday = Weekday[first_weekday]
 
+    norm_lc = normalize_locale_win(lc_time)
+
+    # Detect country from locale string
     if financial is None and country is None:
-        match = re.match("^[a-z]{2}_([a-z]{2})", lc_time, re.I)
+        match = re.match("^[a-z]{2}_([a-z]{2})", norm_lc, re.I)
         if match:
             country = match.group(1)
             print(f"Holiday region is {country}.", file=sys.stderr)
@@ -225,7 +227,8 @@ def main(
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     with open(output, "wb") as fh:
         cal = HTMLCalendar(
-            firstweekday=first_weekday,
+            firstweekday=Weekday[first_weekday],
+            locale=lc_time,
             startmonth=start_month,
             country=country,
             financial=financial,

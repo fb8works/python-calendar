@@ -1,0 +1,72 @@
+# windows locale name from https://docs.moodle.org/all/es/Tabla_de_locales
+locale_win2std = {
+    "localewin": "locale",
+    "afrikaans_south africa": "af_ZA",
+    "albanian_albania": "sq_AL",
+    "arabic_saudi arabia": "ar_SA",
+    "basque_spain": "eu_ES",
+    "belarusian_belarus": "be_BY",
+    "serbian (latin)": "bs_BA",
+    "bulgarian_bulgaria": "bg_BG",
+    "catalan_spain": "ca_ES",
+    "croatian_croatia": "hr_HR",
+    "chinese_china": "zh_CN",
+    "chinese_taiwan": "zh_TW",
+    "czech_czech republic": "cs_CZ",
+    "danish_denmark": "da_DK",
+    "dutch_netherlands": "nl_NL",
+    "english_australia": "en",
+    "estonian_estonia": "et_EE",
+    "farsi_iran": "fa_IR",
+    "filipino_philippines": "ph_PH",
+    "finnish_finland": "fi_FI",
+    "french_france": "fr_FR",
+    # "-": "fr_CH",
+    # "-": "fr_BE",
+    "gaelic; scottish gaelic": "ga",
+    "galician_spain": "gl_ES",
+    "georgian_georgia": "ka_GE",
+    "german_germany": "de_DE",
+    "greek_greece": "el_GR",
+    "hebrew_israel": "he_IL",
+    "hindi": "hi_IN",
+    "hungarian_hungary": "hu",
+    "icelandic_iceland": "is_IS",
+    "indonesian_indonesia": "id_ID",
+    "italian_italy": "it_IT",
+    "japanese_japan": "ja_JP",
+    "kannada": "kn_IN",
+    "khmer": "km_KH",
+    "korean_korea": "ko_KR",
+    "lithuanian_lithuania": "lt_LT",
+    "latvian_latvia": "lat",
+    "malayalam_india": "ml_IN",
+    "indonesian_indonesia": "id_ID",
+    "maori": "mi_NZ",
+    "norwegian_norway": "no_NO",
+    "norwegian-nynorsk_norway": "nn_NO",
+    "polish_poland": "pl",
+    "portuguese_portugal": "pt_PT",
+    "portuguese_brazil": "pt_BR",
+    "romanian_romania": "ro_RO",
+    "russian_russia": "ru_RU",
+    "serbian (cyrillic)_serbia and montenegro": "sr_CS",
+    "slovak_slovakia": "sk_SK",
+    "slovenian_slovenia": "sl_SI",
+    # so_SO.UTF-8 not found
+    "spanish_spain": "es_ES",
+    "swedish_sweden": "sv_SE",
+    # tl.UTF-8 not found
+    "thai_thailand": "th_TH",
+    "turkish_turkey": "tr_TR",
+    "ukrainian_ukraine": "uk_UA",
+    "vietnamese_viet nam": "vi_VN",
+}
+
+
+def normalize_locale_win(name):
+    name = name.split(".")[0]
+    try:
+        return locale_win2std[name.lower()]
+    except KeyError:
+        return name
