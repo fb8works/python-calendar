@@ -86,7 +86,7 @@ def get_css_stream(style):
 @click.argument(
     "first-weekday",
     type=click.Choice(list(Weekday.__members__)),
-    default="mon",
+    default="sun",
     required=False,
 )
 @click.argument("start-month", type=click.IntRange(1, 12), default=1, required=False)
