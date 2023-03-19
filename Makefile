@@ -50,7 +50,7 @@ test:
 test-verify: $(SYUKUJITSU_CSV) | prep
 	poetry run python -m $(PACKAGE).test.verify
 
-pre-commit: setup.py requirements.txt
+pre-commit: lint setup.py requirements.txt
 
 setup.py: pyproject.toml poetry.lock README.md
 	rm -rf dist
