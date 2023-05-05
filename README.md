@@ -42,10 +42,10 @@ Show the anual calendar in browser.
 pycal . -H
 ```
 
-Generate HTML calendar for this year.
+Generate HTML calendar for specific year.
 
 ```bash
-pycal -o calendar.html
+pycal 2023 -o calendar.html
 ```
 
 ## Arguments and options

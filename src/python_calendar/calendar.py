@@ -127,11 +127,21 @@ class HTMLCalendar(calendar.LocaleHTMLCalendar):
         a("\n")
         return "".join(v)
 
+    def itermonthdates_just_month(self, year, month):
+        d = datetime.date(year, month, 1)
+        m = month + 1
+        y = year + m // 12
+        m = (month % 12) + 1
+        next_month_day = datetime.date(y, m, 1)
+        while d < next_month_day:
+            yield d
+            d += datetime.timedelta(days=1)
+
     def get_holiday_list(self, theyear):
         v = []
         for i in range(self.startmonth, self.startmonth + self.num_month):
             m = ((i - 1) % 12) + 1
-            for d in self.itermonthdates(theyear, m):
+            for d in self.itermonthdates_just_month(theyear, m):
                 name = self.holidays.get(d)
                 if name:
                     v.append((d, name))
