@@ -28,12 +28,24 @@ Print a calendar for this month. requires w3m or elinks. you must install elinks
 pycal
 ```
 
+Anual calendar for this year.
+
+```bash
+pycal .
+```
+
 ## HTML calendar
+
+Show the anual calendar in browser.
+
+```bash
+pycal . -H
+```
 
 Generate HTML calendar for this year.
 
 ```bash
-pycal -H 2023
+pycal -o calendar.html
 ```
 
 ## Arguments and options

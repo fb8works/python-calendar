@@ -21,12 +21,8 @@ prep:
 	@[ -e "$$(poetry env info -p)" ] || poetry install
 
 setup-devel:
-	sudo apt-get update
 	cp devel/.tool-versions .
-	sudo apt-get install tk-dev
 	cp devel/.envrc .
-	direnv allow
-	poetry install
 
 $(OUTPUT): prep
 	poetry run pycal --no-browser --output "$@" --style "$(STYLE)" --css "$(CSS)" --force
@@ -42,7 +38,6 @@ lint:
 	poetry run isort .
 	poetry run black .
 	poetry run mypy .
-#	poetry run pflake8 .
 
 test:
 	poetry run pytest
@@ -72,4 +67,4 @@ distclean: clean
 $(SYUKUJITSU_CSV):
 	poetry run python -c $$'import sys, urllib.request\ncontent = urllib.request.urlopen(sys.argv[1]).read()\nwith open(sys.argv[2], mode="wb") as f: f.write(content)' "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv" "$@"
 
-.PHONY: all prep setup setup-devel calendar watch lint test test-verify production clean distclean
+.PHONY: all prep setup setup-devel calendar watch lint test test-verify clean distclean

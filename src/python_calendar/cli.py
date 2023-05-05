@@ -104,6 +104,8 @@ def open_for_write_binary(filename):
         folder.mkdir(parents=True, exist_ok=True)
         with NamedTemporaryFile(dir=folder, delete=False, mode="w+b") as tmp:
             yield tmp
+            tmp.close()
+            Path(filename).unlink(missing_ok=True)
             Path(tmp.name).rename(filename)
 
 
@@ -302,18 +304,32 @@ def main(
     ]
     locale_save = {}
 
+    # save locales
     for name in locale_types:
-        locale_save[name] = locale.getlocale(getattr(locale, name))
+        try:
+            value = getattr(locale, name)
+        except AttributeError:
+            pass
+        else:
+            locale_save[name] = locale.getlocale(value)
+
+    # get default encoding by nl_langinfo (Windows is not supported)
     try:
         try:
             locale.setlocale(locale.LC_ALL, lc_time.split(".")[0])
         except locale.Error as exc:
             # setlocale(locale.LC_ALL, "en_US") -> unsupported locale setting
             pass
-        default_encoding = locale.nl_langinfo(locale.CODESET)
+        try:
+            default_encoding = locale.nl_langinfo(locale.CODESET)
+        except AttributeError:
+            # Windows
+            default_encoding = locale.getpreferredencoding()
+            if '.' in default_encoding:
+                default_encoding = lc_time.split(".")[1]
     finally:
         locale.setlocale(locale.LC_ALL, "")
-        for name in locale_types:
+        for name in locale_save:
             locale.setlocale(getattr(locale, name), locale_save[name])
 
     if encoding is None:
@@ -338,9 +354,10 @@ def main(
             print_error("Please check available locale on your system.")
             sys.exit(1)
     finally:
-        for name in locale_types:
+        for name in locale_save:
             locale.setlocale(getattr(locale, name), locale_save[name])
 
+    # 'Japanese_Japan.utf8' -> 'ja_JP'
     norm_lc = normalize_locale_win(lc_time)
 
     # Detect country from locale string
