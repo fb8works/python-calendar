@@ -303,7 +303,12 @@ def main(
     locale_save = {}
 
     for name in locale_types:
-        locale_save[name] = locale.getlocale(getattr(locale, name))
+        try:
+            value = getattr(locale, name)
+        except AttributeError:
+            pass
+        else:
+            locale_save[name] = locale.getlocale(value)
     try:
         try:
             locale.setlocale(locale.LC_ALL, lc_time.split(".")[0])
@@ -313,7 +318,7 @@ def main(
         default_encoding = locale.nl_langinfo(locale.CODESET)
     finally:
         locale.setlocale(locale.LC_ALL, "")
-        for name in locale_types:
+        for name in locale_save:
             locale.setlocale(getattr(locale, name), locale_save[name])
 
     if encoding is None:
